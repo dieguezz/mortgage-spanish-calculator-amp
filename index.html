@@ -3,19 +3,31 @@
     <head>
         <meta charset="utf-8" />
         <script async src="https://cdn.ampproject.org/v0.js"></script>
-        <script async custom-element="amp-form" src="https://cdn.ampproject.org/v0/amp-form-0.1.js"></script>
-        <script custom-template="amp-mustache" src="https://cdn.ampproject.org/v0/amp-mustache-0.2.js" async></script>
-        <script async custom-element="amp-bind" src="https://cdn.ampproject.org/v0/amp-bind-0.1.js"></script>
+        <script
+            async
+            custom-element="amp-form"
+            src="https://cdn.ampproject.org/v0/amp-form-0.1.js"
+        ></script>
+        <script
+            custom-template="amp-mustache"
+            src="https://cdn.ampproject.org/v0/amp-mustache-0.2.js"
+            async
+        ></script>
+        <script
+            async
+            custom-element="amp-bind"
+            src="https://cdn.ampproject.org/v0/amp-bind-0.1.js"
+        ></script>
 
         <title>Calculadora de amortización de hipotecas</title>
-        
+
         <link
-        rel="canonical"
-        href="https://amp.dev/documentation/guides-and-tutorials/start/create/basic_markup/"
+            rel="canonical"
+            href="https://amp.dev/documentation/guides-and-tutorials/start/create/basic_markup/"
         />
         <meta
-        name="viewport"
-        content="width=device-width,minimum-scale=1,initial-scale=1"
+            name="viewport"
+            content="width=device-width,minimum-scale=1,initial-scale=1"
         />
         <script type="application/ld+json">
             {
@@ -86,45 +98,57 @@
         >
     </head>
     <body>
-        <form method="post" action-xhr="https://amortization-calc.herokuapp.com" target="_top" on="submit-success: AMP.setState({'calculations': event.response})">
+        <form
+            method="post"
+            action-xhr="https://amortization-calc.herokuapp.com"
+            target="_top"
+            on="submit-success: AMP.setState({'calculations': event.response})"
+        >
             <div class="form-control">
                 <label for="capital">Capital</label>
-                <input type="number" id="capital" name="capital"/>
+                <input type="number" id="capital" name="capital" />
             </div>
             <div class="form-control">
                 <label for="terms">Plazo en años</label>
-                <input type="number" id="terms" name="terms"/>
+                <input type="number" id="terms" name="terms" />
             </div>
             <div class="form-control">
                 <label for="interestType">Tipo de interés</label>
-                <input type="number" id="interestType" name="interestType"/>
+                <input type="text" id="interestType" name="interestType" />
             </div>
             <div class="form-control">
                 <label for="amortizationAmount">Cantidad a amortizar</label>
-                <input type="number" id="amortizationAmount" name="amortizationAmount"/>
+                <input
+                    type="text"
+                    id="amortizationAmount"
+                    name="amortizationAmount"
+                />
             </div>
             <div class="form-control">
                 <label for="year">Año de amortización</label>
-                <input type="number" id="year" name="year"/>
+                <input type="number" id="year" name="year" min="1" />
             </div>
             <div class="form-control">
                 <label for="month">Mes de amortización</label>
-                <input type="number" id="month" name="month"/>
+                <input type="number" id="month" name="month" min="1" max="12" />
             </div>
 
             <div submit-success>
                 <template type="amp-mustache">
-                    
                     <div>
                         <p>Resultado para amortizar capital</p>
                         <ul>
                             <li>
                                 <span>Cuota resultante:</span>
-                                <span id="monthlyPrice">{{ monthlyPrice }}</span>
+                                <span id="monthlyPrice"
+                                    >{{ monthlyPrice }}</span
+                                >
                             </li>
                             <li>
                                 <span>Ahorro en intereses:</span>
-                                <span id="interestSavingsForPrice">{{ interestSavingsForPrice }}</span>
+                                <span id="interestSavingsForPrice"
+                                    >{{ interestSavingsForPrice }}</span
+                                >
                             </li>
                         </ul>
                     </div>
@@ -133,29 +157,54 @@
                         <ul>
                             <li>
                                 <span>Cuota resultante:</span>
-                                <span id="monthlyPrice">{{ monthlyPrice }}</span>
+                                <span id="monthlyPrice"
+                                    >{{ monthlyPrice }}</span
+                                >
                             </li>
                             <li>
                                 <span>Ahorro en intereses:</span>
-                                <span id="interestSavingsForPrice">{{ interestSavingsForPrice }}</span>
+                                <span id="interestSavingsForPrice"
+                                    >{{ interestSavingsForPrice }}</span
+                                >
                             </li>
                             <li>
                                 <span>Cuotas restantes:</span>
-                                <span id="pendingPayments">{{ pendingPayments }}</span>
+                                <span id="pendingPayments"
+                                    >{{ pendingPayments }}</span
+                                >
                             </li>
+                            <ul>
+                                <p>Para amortizar capital</p>
+                                {{#fees}}
+                                <li>Año: {{year}}</li>
+                                <li>Mes: {{month}}</li>
+                                <li>Precio: {{price}}</li>
+                                <li>Interés: {{interest}}</li>
+                                <li>Amortización: {{amortization}}</li>
+                                <li>Capital pendiente: {{pendingCapital}}</li>
+                                {{/fees}}
+                            </ul>
+                            <ul>
+                                <p>Para amortizar tiempo</p>
+                                {{#fees}}
+                                <li>Año: {{year}}</li>
+                                <li>Mes: {{month}}</li>
+                                <li>Precio: {{priceForTime}}</li>
+                                <li>Interés: {{interestForTime}}</li>
+                                <li>Amortización: {{amortizationForTime}}</li>
+                                <li>Capital pendiente: {{pendingCapitalForTime}}</li>
+                                {{/fees}}
+                            </ul>
                         </ul>
-                    </div>                </template>
-              </div>
-              <div submit-error>
-                <template type="amp-mustache">
-                  Subscription failed!
+                    </div>
                 </template>
-              </div>
-              <div submitting>
-                <template type="amp-mustache">
-                    Loading...
-                  </template>
-              </div>
+            </div>
+            <div submit-error>
+                <template type="amp-mustache"> Subscription failed! </template>
+            </div>
+            <div submitting>
+                <template type="amp-mustache"> Loading... </template>
+            </div>
 
             <button type="submit">Calcular</button>
         </form>
